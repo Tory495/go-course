@@ -1,7 +1,11 @@
 package main
 
-import "fmt"
+import (
+	"go/courses/configs"
+	"go/courses/pkg/db"
+)
 
 func main() {
-	fmt.Println("First commit")
+	conf := configs.LoadConfig()
+	_ = db.NewDb(conf)
 }
