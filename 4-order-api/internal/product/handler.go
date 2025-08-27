@@ -160,7 +160,7 @@ func (handler *ProductHandler) delete() http.HandlerFunc {
 			return
 		}
 
-		handler.ProductRepository.Delete(uint(id))
+		err = handler.ProductRepository.Delete(uint(id))
 
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusBadRequest)
