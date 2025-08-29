@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"go/courses/configs"
+	"go/courses/internal/auth"
 	"go/courses/internal/product"
 	"go/courses/pkg/db"
 	"go/courses/pkg/middleware"
@@ -12,15 +13,29 @@ import (
 )
 
 func main() {
-	return
 	logrus.SetFormatter(&logrus.JSONFormatter{})
 	conf := configs.LoadConfig()
 	db := db.NewDb(conf)
 
 	router := http.NewServeMux()
 
+	// Repositories
+
+	authRepository := auth.NewAuthRepository(db)
+
 	productRepository := product.NewProductRepository(product.ProductRepositoryDeps{
 		Database: db,
+	})
+
+	// Services
+
+	authService := auth.NewAuthService(authRepository)
+
+	// Handlers
+
+	auth.NewAuthHandler(router, &auth.AuthHandlerDeps{
+		Config:      conf,
+		AuthService: authService,
 	})
 
 	product.NewProductHandler(router, product.ProductHandlerDeps{

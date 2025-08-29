@@ -2,6 +2,7 @@ package main
 
 import (
 	"go/courses/configs"
+	"go/courses/internal/auth"
 	"go/courses/internal/product"
 
 	"gorm.io/driver/postgres"
@@ -17,5 +18,5 @@ func main() {
 		panic(err)
 	}
 
-	db.AutoMigrate(&product.Product{})
+	db.AutoMigrate(&product.Product{}, &auth.Auth{})
 }
