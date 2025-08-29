@@ -12,3 +12,7 @@ type ConfirmRequest struct {
 	SessionId string `json:"sessionId"`
 	Code      int    `json:"code"`
 }
+
+type ConfirmResponse struct {
+	Token string `json:"token"`
+}

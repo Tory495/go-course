@@ -43,21 +43,3 @@ func (repo *AuthRepository) GetByPhone(phone string) (*Auth, error) {
 
 	return &auth, nil
 }
-
-func (repo *AuthRepository) UpdateCodeByPhone(code int, phone string) (*Auth, error) {
-	auth, err := repo.GetByPhone(phone)
-
-	if err != nil {
-		return nil, err
-	}
-
-	auth.Code = code
-
-	result := repo.Database.Updates(auth)
-
-	if result.Error != nil {
-		return nil, result.Error
-	}
-
-	return auth, nil
-}

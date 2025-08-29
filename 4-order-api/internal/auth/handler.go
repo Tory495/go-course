@@ -45,20 +45,20 @@ func (h *AuthHandler) auth() http.HandlerFunc {
 			return
 		}
 
-		auth := &Auth{
-			Phone:     body.Phone,
-			SessionId: sessionId,
-			Code:      0,
-		}
-
-		_, err = h.AuthService.AuthRepository.StoreAuth(auth)
+		code, err := generator.GenerateSmsCode()
 
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 			return
 		}
 
-		err = h.AuthService.SendSms(body.Phone)
+		auth := &Auth{
+			Phone:     body.Phone,
+			SessionId: sessionId,
+			Code:      code,
+		}
+
+		_, err = h.AuthService.AuthRepository.StoreAuth(auth)
 
 		if err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -99,6 +99,8 @@ func (h *AuthHandler) confirm() http.HandlerFunc {
 			return
 		}
 
-		response.SendJsonResponse(w, token, http.StatusOK)
+		response.SendJsonResponse(w, ConfirmResponse{
+			Token: token,
+		}, http.StatusOK)
 	}
 }
