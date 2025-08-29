@@ -7,9 +7,13 @@ import (
 	"go/courses/pkg/db"
 	"go/courses/pkg/middleware"
 	"net/http"
+
+	"github.com/sirupsen/logrus"
 )
 
 func main() {
+	return
+	logrus.SetFormatter(&logrus.JSONFormatter{})
 	conf := configs.LoadConfig()
 	db := db.NewDb(conf)
 
