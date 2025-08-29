@@ -5,6 +5,7 @@ import (
 	"go/courses/configs"
 	"go/courses/internal/product"
 	"go/courses/pkg/db"
+	"go/courses/pkg/middleware"
 	"net/http"
 )
 
@@ -22,9 +23,12 @@ func main() {
 		ProductRepository: productRepository,
 	})
 
+	// Middlewares
+	stack := middleware.Chain(middleware.Logging)
+
 	server := http.Server{
 		Addr:    ":8081",
-		Handler: router,
+		Handler: stack(router),
 	}
 
 	fmt.Println("Server is listening to port 8081")
